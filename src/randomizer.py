@@ -1,6 +1,6 @@
 import os, json
 import logging
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from faker import Faker
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.textanalytics import TextAnalyticsClient
@@ -27,7 +27,9 @@ class PiiRandomizer:
         openai_endpoint: str = None,
         openai_key: str = None,
         openai_api_version: str = "2024-02-01",
-        model_name: str = "gpt-4o"
+        model_name: str = "gpt-4o",
+        text_language: str = "pt-br",
+        faker_locale: str = "pt_BR"
     ):
         # Initialize Azure Text Analytics client
         self.language_endpoint = language_endpoint or os.getenv("AZURE_LANGUAGE_ENDPOINT")
@@ -54,12 +56,16 @@ class PiiRandomizer:
             api_version=openai_api_version
         )
 
+        # Set default model, PII extraction language, and Faker locale
         self.model_name = model_name
-        self.fake = Faker("pt_BR")
+        self.pii_language = text_language
+        self.faker_locale = faker_locale
+        self.fake = Faker(self.faker_locale)
 
-    def recognize_pii_entities(self, documents: List[str], language: str = "pt-br") -> List[Dict[str, Any]]:
-        """Recognize PII entities in provided documents."""
-        response = self.text_analytics_client.recognize_pii_entities(documents, language=language)
+    def recognize_pii_entities(self, documents: List[str], language: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Recognize PII entities in provided documents using specified or default language."""
+        lang = language if language is not None else self.pii_language
+        response = self.text_analytics_client.recognize_pii_entities(documents, language=lang)
         entities: List[Dict[str, Any]] = []
         for doc in response:
             if not doc.is_error:

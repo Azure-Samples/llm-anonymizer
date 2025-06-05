@@ -3,13 +3,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-green.svg)](https://www.python.org/)
 
-An elegant toolkit to detect and anonymize PII (Personally Identifiable Information) in text using Azure Text Analytics, generate realistic Brazilian Portuguese fake data with Faker, and analyze user intent with Azure OpenAI. Perfect for preserving privacy and testing conversational AI scenarios side-by-side with original and anonymized inputs.
+An elegant toolkit to detect and anonymize PII (Personally Identifiable Information) in text using Azure Text Analytics, generate realistic fake data in multiple languages with Faker, and analyze user intent with Azure OpenAI. Perfect for preserving privacy and testing conversational AI scenarios side-by-side with original and anonymized inputs, with full support for language customization.
 
-## 🌟 Features
-
-- **PII Recognition**: Leverages Azure Text Analytics to accurately identify entities such as names, CPF, RG, addresses, phone numbers, emails, and organizations in Portuguese text.
-- **Fake Data Generation**: Uses [Faker](https://faker.readthedocs.io/) configured for `pt_BR` to replace sensitive fields with realistic fake data (names, CPFs, RGs, addresses, etc.).
-- **Anonymized vs. Original Analysis**: Call Azure OpenAI (`gpt-4o`) on both original and anonymized text to compare detected user intent.
+- **PII Recognition**: Leverages Azure Text Analytics to accurately identify entities such as names, CPF, RG, addresses, phone numbers, emails, and organizations. The default parameter is configured for Brazilian Portuguese. You can use other languages as well, please check the [language support documentation](https://learn.microsoft.com/en-us/azure/ai-services/language-service/concepts/language-support).
+- **Fake Data Generation**: Uses [Faker](https://faker.readthedocs.io/). The default parameter is configured for Brazilian Portuguese to replace sensitive fields with realistic fake data (names, CPFs, RGs, addresses, etc.). You can use other languages as well, please check the [available locales](https://fakerjs.dev/guide/localization.html#available-locales).
+- **Anonymized vs. Original Analysis**: Call Azure OpenAI on both original and anonymized text to compare detected user intent.
 - **Class-based API**: Clean `PiiRandomizer` class with methods for recognition, fake data generation, replacement, and chat completions.
 - **Configurable & Extensible**: Environment-based configuration with sensible defaults and clear error messages if credentials are missing.
 
@@ -76,8 +74,14 @@ llm-randomizer/
 ```python
 from randomizer import PiiRandomizer
 
-# Initialize (reads env vars if not passed)
+# Initialize with default Brazilian Portuguese
 randomizer = PiiRandomizer()
+
+# Or override PII extraction language and Faker locale, e.g. English:
+randomizer_en = PiiRandomizer(
+    text_language='en',    # for Azure PII extraction
+    faker_locale='en_US'    # for realistic fake data in English
+)
 
 # Step 1: Recognize entities
 entities = randomizer.recognize_pii_entities([text])
