@@ -44,19 +44,23 @@ export AZURE_OPENAI_API_KEY=<your-openai-key>
 
 ### 4. Usage
 
-Run the script to see PII masking and intent comparison in action:
+Run the example entrypoint to see PII masking and intent comparison in action:
 
 ```bash
-python src/anonymizer.py
+python main.py
 ```
 
-You should see logs like:
+You should see output like:
 
-```
-INFO:root:Original Text: Olá, meu nome é José Almeida, meu CPF é ...
-INFO:root:Masked Text: Olá, meu nome é <FAKE_NAME>, meu CPF é <FAKE_CPF>...
-INFO:root:Intent from original text: "Conhecer cartões de crédito"
-INFO:root:Intent from masked text: "Conhecer cartões de crédito"
+```text
+Original Text:
+Olá, meu nome é José Almeida, meu CPF é 379.799.200-90 e meu RG 11.456.264-7. Meu telefone é (11) 92875-5858 e meu e-mail joalmeida@contoso.com. Trabalho na Contoso e gostaria de conhecer os cartões de crédito disponíveis para meu perfil.
+
+Anonymized Text:
+Olá, meu nome é <FAKE_NAME>, meu CPF é <FAKE_CPF> e meu RG <FAKE_RG>. Meu telefone é <FAKE_PHONE> e meu e-mail <FAKE_EMAIL>. Trabalho na <FAKE_ORG> e gostaria de conhecer os cartões de crédito disponíveis para meu perfil.
+
+Intent from original text: "Conhecer cartões de crédito"
+Intent from masked text: "Conhecer cartões de crédito"
 ```
 
 ## 🛠️ Project Structure
