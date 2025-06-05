@@ -17,7 +17,7 @@ for name in list(logging.root.manager.loggerDict):
     if name != "root":
         logging.getLogger(name).setLevel(logging.WARNING)
 
-class PiiRandomizer:
+class PiiAnonymizer:
     """Class to handle PII recognition, fake data generation, replacement, and Azure OpenAI calls."""
 
     def __init__(
@@ -146,7 +146,7 @@ class PiiRandomizer:
 
 
 def main() -> None:
-    """Sample usage of the PiiRandomizer class."""
+    """Sample usage of the PiiAnonymizer class."""
 
     # Define your System Prompt and Sample Text
     system_prompt = "Você é um assistente que identifica a intenção principal do usuário baseado em um input. " \
@@ -160,7 +160,7 @@ def main() -> None:
         "Trabalho na Contoso e gostaria de conhecer os cartões de crédito disponíveis para meu perfil."
     )
 
-    randomizer = PiiRandomizer()
+    randomizer = PiiAnonymizer()
     texts = [sample_text]
 
     entities = randomizer.recognize_pii_entities(texts)

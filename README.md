@@ -1,4 +1,4 @@
-# llm-randomizer
+# llm-anonymizer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-green.svg)](https://www.python.org/)
@@ -8,7 +8,7 @@ An elegant toolkit to detect and anonymize PII (Personally Identifiable Informat
 - **PII Recognition**: Leverages Azure Text Analytics to accurately identify entities such as names, CPF, RG, addresses, phone numbers, emails, and organizations. The default parameter is configured for Brazilian Portuguese. You can use other languages as well, please check the [language support documentation](https://learn.microsoft.com/en-us/azure/ai-services/language-service/concepts/language-support).
 - **Fake Data Generation**: Uses [Faker](https://faker.readthedocs.io/). The default parameter is configured for Brazilian Portuguese to replace sensitive fields with realistic fake data (names, CPFs, RGs, addresses, etc.). You can use other languages as well, please check the [available locales](https://fakerjs.dev/guide/localization.html#available-locales).
 - **Anonymized vs. Original Analysis**: Call Azure OpenAI on both original and anonymized text to compare detected user intent.
-- **Class-based API**: Clean `PiiRandomizer` class with methods for recognition, fake data generation, replacement, and chat completions.
+- **Class-based API**: Clean `PiiAnonymizer` class with methods for recognition, fake data generation, replacement, and chat completions.
 - **Configurable & Extensible**: Environment-based configuration with sensible defaults and clear error messages if credentials are missing.
 
 ## 🚀 Quick Start
@@ -23,8 +23,8 @@ An elegant toolkit to detect and anonymize PII (Personally Identifiable Informat
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Azure-Samples/llm-randomizer.git
-   cd llm-randomizer
+   git clone https://github.com/Azure-Samples/llm-anonymizer.git
+   cd llm-anonymizer
    ```
 2. Install dependencies:
    ```bash
@@ -47,7 +47,7 @@ export AZURE_OPENAI_API_KEY=<your-openai-key>
 Run the script to see PII masking and intent comparison in action:
 
 ```bash
-python src/randomizer.py
+python src/anonymizer.py
 ```
 
 You should see logs like:
@@ -62,38 +62,38 @@ INFO:root:Intent from masked text: "Conhecer cartões de crédito"
 ## 🛠️ Project Structure
 
 ```
-llm-randomizer/
+llm-anonymizer/
 ├── requirements.txt       # Python dependencies
 ├── README.md              # This file
 └── src/
-    └── randomizer.py      # Main class and CLI demonstration
+    └── anonymizer.py      # Main class and CLI demonstration
 ```
 
 ## ⚙️ API Overview
 
 ```python
-from randomizer import PiiRandomizer
+from anonymizer import PiiAnonymizer
 
 # Initialize with default Brazilian Portuguese
-randomizer = PiiRandomizer()
+anonymizer = PiiAnonymizer()
 
 # Or override PII extraction language and Faker locale, e.g. English:
-randomizer_en = PiiRandomizer(
+anonymizer_en = PiiAnonymizer(
     text_language='en',    # for Azure PII extraction
     faker_locale='en_US'    # for realistic fake data in English
 )
 
 # Step 1: Recognize entities
-entities = randomizer.recognize_pii_entities([text])
+entities = anonymizer.recognize_pii_entities([text])
 
 # Step 2: Generate fake data
-fake = randomizer.generate_fake_data(entities)
+fake = anonymizer.generate_fake_data(entities)
 
 # Step 3: Replace in text
-masked_text = randomizer.replace_with_fake_data([text], fake)[0]
+masked_text = anonymizer.replace_with_fake_data([text], fake)[0]
 
 # Step 4: Get user intent
-intent = randomizer.aoai_api_call(masked_text)
+intent = anonymizer.aoai_api_call(masked_text)
 ```
 
 ## 📄 License
